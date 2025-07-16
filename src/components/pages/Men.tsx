@@ -19,11 +19,13 @@ function Men() {
   const [userList, setUserList] = useState<User[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
 
+  
   useEffect(() => {
     readUsers();
   }, []);
 
   const readUsers = async () => {
+
     const { data, error } = await supabase.from("SupaCRUD").select("*");
     if (error) {
       console.error("Error fetching users:", error);
