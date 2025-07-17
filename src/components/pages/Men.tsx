@@ -126,8 +126,9 @@ function Men() {
 
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="flex gap-3">
         <input
+          className="border-2 border-gray-500"
           type="text"
           placeholder="First Name"
           value={firstName}
@@ -136,6 +137,7 @@ function Men() {
           }
         />
         <input
+          className="border-2 border-gray-500"
           type="text"
           placeholder="Last Name"
           value={lastName}
@@ -144,6 +146,7 @@ function Men() {
           }
         />
         <input
+          className="border-2 border-gray-500"
           type="email"
           placeholder="Email"
           value={email}
@@ -152,6 +155,7 @@ function Men() {
           }
         />
         <input
+          className="border-2 border-gray-500"
           type="tel"
           placeholder="Phone"
           value={phone}
@@ -160,6 +164,7 @@ function Men() {
           }
         />
         <input
+          className="border-2 border-gray-500"
           type="text"
           placeholder="Location"
           value={location}
@@ -167,7 +172,7 @@ function Men() {
             setLocation(e.target.value)
           }
         />
-        <button type="submit">{editingId ? "Update" : "Submit"}</button>
+        <button className="border-2 px-3" type="submit">{editingId ? "Update" : "Submit"}</button>
         {editingId && (
           <button
             type="button"
@@ -185,19 +190,33 @@ function Men() {
         )}
       </form>
 
-      <ul>
-        {userList.map((user) => (
-          <li className="flex gap-10" key={user.id}>
-            <p>{user.first_name}</p>
-            <p>{user.last_name}</p>
-            <p>{user.email}</p>
-            <p>{user.phone}</p>
-            <p>{user.location}</p>
-            <button onClick={() => editUser(user)}>Edit</button>
-            <button onClick={() => deleteUser(user.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
+      <table>
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Location</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {userList.map((user) => (
+            <tr key={user.id}>
+              <td>{user.first_name}</td>
+              <td>{user.last_name}</td>
+              <td>{user.email}</td>
+              <td>{user.phone}</td>
+              <td>{user.location}</td>
+              <td>
+                <button className="border-2 bg-green-500 px-3" onClick={() => editUser(user)}>Edit</button>
+                <button className="border-2 bg-red-500 px-3" onClick={() => deleteUser(user.id)}>Delete</button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </>
   );
 }
