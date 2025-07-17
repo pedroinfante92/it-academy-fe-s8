@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Men from "./components/pages/Men";
 import Map from "./components/pages/Map";
-import FullCalendar from "./components/pages/FullCalendar";
+import FullCalendar from "./components/pages/Calendar";
 import ChartJS from "./components/pages/ChartJS";
 import Layout from "./components/layout/Layout";
 
