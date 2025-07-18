@@ -129,7 +129,7 @@ export default function Calendar() {
   };
 
   return (
-    <div className="demo-app">
+    <div className="demo-app w-1/2">
       <div className="demo-app-main">
         <FullCalendar
           plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
@@ -138,7 +138,7 @@ export default function Calendar() {
             center: "title",
             right: "dayGridMonth,timeGridWeek,timeGridDay",
           }}
-          initialView="timeGridWeek"
+          initialView="dayGridMonth"
           editable={true}
           selectable={true}
           selectMirror={true}

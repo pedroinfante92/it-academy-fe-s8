@@ -3,7 +3,7 @@
 
 function Navbar () {
     return(
-        <nav>
+        <nav className="flex gap-2 py-5">
         <Link to="/">Men</Link>
         <Link to="/map">Map</Link>
         <Link to="/fullcalendar">FullCalendar</Link>
