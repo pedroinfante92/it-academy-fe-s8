@@ -1,5 +1,5 @@
-import { MapContainer, TileLayer } from 'react-leaflet'
-import LocationMarker from './LocationMarket'
+import { MapContainer, TileLayer } from "react-leaflet";
+import LocationMarker from "./LocationMarket";
 
 function Map() {
   return (
@@ -15,7 +15,7 @@ function Map() {
       />
       <LocationMarker />
     </MapContainer>
-  )
+  );
 }
 
-export default Map
+export default Map;

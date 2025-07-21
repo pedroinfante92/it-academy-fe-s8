@@ -30,9 +30,7 @@ const UserLocationChart = () => {
   }, []);
 
   const fetchLocationData = async () => {
-    const { data, error } = await supabase
-    .from("SupaCRUD")
-    .select("location");
+    const { data, error } = await supabase.from("SupaCRUD").select("location");
 
     if (error) {
       console.error("Error fetching location data:", error);

@@ -20,7 +20,9 @@ export default function Calendar() {
       const formattedEvents = data.map((dbEvent) => {
         const start = `${dbEvent.event_day}T${dbEvent.event_hour}`;
         const allDay = dbEvent.event_hour === "00:00:00";
-        const end = new Date(new Date(start).getTime() + 60 * 60 * 1000).toISOString();
+        const end = new Date(
+          new Date(start).getTime() + 60 * 60 * 1000
+        ).toISOString();
 
         return {
           id: dbEvent.id,
@@ -57,28 +59,31 @@ export default function Calendar() {
   const handleEventAdd = async (addInfo) => {
     const { title, startStr, allDay } = addInfo.event;
     const [event_day, timeWithOffset] = startStr.split("T");
-    const event_hour = allDay ? "00:00:00" : timeWithOffset?.substring(0, 8) || "00:00:00";
+    const event_hour = allDay
+      ? "00:00:00"
+      : timeWithOffset?.substring(0, 8) || "00:00:00";
 
     try {
-      const { data, error } = await supabase.from("events").insert([
-        {
-          event_name: title,
-          event_day,
-          event_hour,
-        },
-      ]).select(); // Use .select() to get the inserted data, including the new id
+      const { data, error } = await supabase
+        .from("events")
+        .insert([
+          {
+            event_name: title,
+            event_day,
+            event_hour,
+          },
+        ])
+        .select();
 
       if (error) throw error;
       console.log("Event successfully inserted into DB:", data);
-      
-      // Update the event with the correct Supabase ID
+
       addInfo.event.setProp("id", data[0].id);
-      readEvents(); // Refresh to ensure state is fully synchronized
-      
+      readEvents();
     } catch (err) {
       console.error("Error adding event:", err.message);
       alert("Failed to add event.");
-      addInfo.revert(); // Revert the event from the calendar if the database save fails
+      addInfo.revert();
     }
   };
 
@@ -86,8 +91,10 @@ export default function Calendar() {
     const { id, title, start, allDay } = changeInfo.event;
     const startStr = start.toISOString();
     const [event_day, timeWithOffset] = startStr.split("T");
-    const event_hour = allDay ? "00:00:00" : timeWithOffset?.substring(0, 8) || "00:00:00";
-    
+    const event_hour = allDay
+      ? "00:00:00"
+      : timeWithOffset?.substring(0, 8) || "00:00:00";
+
     try {
       const { data, error } = await supabase
         .from("events")
@@ -100,7 +107,6 @@ export default function Calendar() {
 
       if (error) throw error;
       console.log("Event updated successfully:", data);
-
     } catch (err) {
       console.error("Error updating event:", err.message);
       changeInfo.revert();
@@ -108,7 +114,9 @@ export default function Calendar() {
   };
 
   const handleEventClick = async (clickInfo) => {
-    const confirmed = confirm(`Are you sure you want to delete '${clickInfo.event.title}'?`);
+    const confirmed = confirm(
+      `Are you sure you want to delete '${clickInfo.event.title}'?`
+    );
 
     if (confirmed) {
       try {
@@ -120,7 +128,6 @@ export default function Calendar() {
         if (error) throw error;
         console.log("Event deleted successfully:", data);
         clickInfo.event.remove();
-
       } catch (err) {
         console.error("Delete error:", err.message);
         alert("Failed to delete event. Please try again.");

@@ -52,7 +52,7 @@ const UserByEmailDomainChart = () => {
         backgroundColor: backgroundColors.slice(
           0,
           Object.keys(domainCounts).length
-        ), // Use enough colors from the array
+        ),
         borderColor: "#ffffff",
         borderWidth: 2,
       },

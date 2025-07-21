@@ -172,7 +172,9 @@ function Men() {
             setLocation(e.target.value)
           }
         />
-        <button className="border-2 px-3" type="submit">{editingId ? "Update" : "Submit"}</button>
+        <button className="border-2 px-3" type="submit">
+          {editingId ? "Update" : "Submit"}
+        </button>
         {editingId && (
           <button
             type="button"
@@ -210,8 +212,18 @@ function Men() {
               <td>{user.phone}</td>
               <td>{user.location}</td>
               <td>
-                <button className="border-2 bg-green-500 px-3" onClick={() => editUser(user)}>Edit</button>
-                <button className="border-2 bg-red-500 px-3" onClick={() => deleteUser(user.id)}>Delete</button>
+                <button
+                  className="border-2 bg-green-500 px-3"
+                  onClick={() => editUser(user)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="border-2 bg-red-500 px-3"
+                  onClick={() => deleteUser(user.id)}
+                >
+                  Delete
+                </button>
               </td>
             </tr>
           ))}
