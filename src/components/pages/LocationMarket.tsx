@@ -24,66 +24,66 @@ function LocationMarkers() {
     fetchMarkers();
   }, []);
 
-  useMapEvents({
-    click(e) {
-      const newMarker = {
-        id: Date.now(),
-        lat: e.latlng.lat,
-        lng: e.latlng.lng,
-        draggable: true,
-      };
+  // useMapEvents({
+  //   click(e) {
+  //     const newMarker = {
+  //       id: Date.now(),
+  //       lat: e.latlng.lat,
+  //       lng: e.latlng.lng,
+  //       draggable: true,
+  //     };
 
-      setMarkers((prev) => [...prev, newMarker]);
+  //     setMarkers((prev) => [...prev, newMarker]);
 
-      supabase
-        .from("markers")
-        .insert([
-          {
-            lat: newMarker.lat,
-            lng: newMarker.lng,
-          },
-        ])
-        .then(({ error }) => {
-          if (error) console.error("Insert error:", error);
-        });
-    },
-  });
+  //     supabase
+  //       .from("markers")
+  //       .insert([
+  //         {
+  //           lat: newMarker.lat,
+  //           lng: newMarker.lng,
+  //         },
+  //       ])
+  //       .then(({ error }) => {
+  //         if (error) console.error("Insert error:", error);
+  //       });
+  //   },
+  // });
 
-  // Handle drag
-  const handleDragEnd = async (index, e) => {
-    const newLatLng = e.target.getLatLng();
-    const updated = [...markers];
-    updated[index].lat = newLatLng.lat;
-    updated[index].lng = newLatLng.lng;
-    setMarkers(updated);
+  // // Handle drag
+  // const handleDragEnd = async (index, e) => {
+  //   const newLatLng = e.target.getLatLng();
+  //   const updated = [...markers];
+  //   updated[index].lat = newLatLng.lat;
+  //   updated[index].lng = newLatLng.lng;
+  //   setMarkers(updated);
 
-    const id = updated[index].id;
-    if (typeof id === "number") return; // skip updating temp-only markers
+  //   const id = updated[index].id;
+  //   if (typeof id === "number") return; // skip updating temp-only markers
 
-    // Update in Supabase
-    const { error } = await supabase
-      .from("markers")
-      .update({
-        lat: newLatLng.lat,
-        lng: newLatLng.lng,
-      })
-      .eq("id", id);
+  //   // Update in Supabase
+  //   const { error } = await supabase
+  //     .from("markers")
+  //     .update({
+  //       lat: newLatLng.lat,
+  //       lng: newLatLng.lng,
+  //     })
+  //     .eq("id", id);
 
-    if (error) console.error("Update error:", error);
-  };
+  //   if (error) console.error("Update error:", error);
+  // };
 
-  // Handle delete
-  const handleDelete = async (idToDelete) => {
-    setMarkers((prev) => prev.filter((m) => m.id !== idToDelete));
+  // // Handle delete
+  // const handleDelete = async (idToDelete) => {
+  //   setMarkers((prev) => prev.filter((m) => m.id !== idToDelete));
 
-    if (typeof idToDelete === "number") return;
+  //   if (typeof idToDelete === "number") return;
 
-    const { error } = await supabase
-      .from("markers")
-      .delete()
-      .eq("id", idToDelete);
-    if (error) console.error("Delete error:", error);
-  };
+  //   const { error } = await supabase
+  //     .from("markers")
+  //     .delete()
+  //     .eq("id", idToDelete);
+  //   if (error) console.error("Delete error:", error);
+  // };
 
   return (
     <>

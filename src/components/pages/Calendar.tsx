@@ -40,100 +40,100 @@ export default function Calendar() {
     }
   };
 
-  const handleDateSelect = (selectInfo) => {
-    const title = prompt("Please enter a new title for your event:");
-    const calendarApi = selectInfo.view.calendar;
-    calendarApi.unselect();
+  // const handleDateSelect = (selectInfo) => {
+  //   const title = prompt("Please enter a new title for your event:");
+  //   const calendarApi = selectInfo.view.calendar;
+  //   calendarApi.unselect();
 
-    if (title) {
-      // Add a temporary event to the calendar; the `eventAdd` handler will then save it to the DB
-      calendarApi.addEvent({
-        title,
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay,
-      });
-    }
-  };
+  //   if (title) {
+  //     // Add a temporary event to the calendar; the `eventAdd` handler will then save it to the DB
+  //     calendarApi.addEvent({
+  //       title,
+  //       start: selectInfo.startStr,
+  //       end: selectInfo.endStr,
+  //       allDay: selectInfo.allDay,
+  //     });
+  //   }
+  // };
 
-  const handleEventAdd = async (addInfo) => {
-    const { title, startStr, allDay } = addInfo.event;
-    const [event_day, timeWithOffset] = startStr.split("T");
-    const event_hour = allDay
-      ? "00:00:00"
-      : timeWithOffset?.substring(0, 8) || "00:00:00";
+  // const handleEventAdd = async (addInfo) => {
+  //   const { title, startStr, allDay } = addInfo.event;
+  //   const [event_day, timeWithOffset] = startStr.split("T");
+  //   const event_hour = allDay
+  //     ? "00:00:00"
+  //     : timeWithOffset?.substring(0, 8) || "00:00:00";
 
-    try {
-      const { data, error } = await supabase
-        .from("events")
-        .insert([
-          {
-            event_name: title,
-            event_day,
-            event_hour,
-          },
-        ])
-        .select();
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from("events")
+  //       .insert([
+  //         {
+  //           event_name: title,
+  //           event_day,
+  //           event_hour,
+  //         },
+  //       ])
+  //       .select();
 
-      if (error) throw error;
-      console.log("Event successfully inserted into DB:", data);
+  //     if (error) throw error;
+  //     console.log("Event successfully inserted into DB:", data);
 
-      addInfo.event.setProp("id", data[0].id);
-      readEvents();
-    } catch (err) {
-      console.error("Error adding event:", err.message);
-      alert("Failed to add event.");
-      addInfo.revert();
-    }
-  };
+  //     addInfo.event.setProp("id", data[0].id);
+  //     readEvents();
+  //   } catch (err) {
+  //     console.error("Error adding event:", err.message);
+  //     alert("Failed to add event.");
+  //     addInfo.revert();
+  //   }
+  // };
 
-  const handleEventChange = async (changeInfo) => {
-    const { id, title, start, allDay } = changeInfo.event;
-    const startStr = start.toISOString();
-    const [event_day, timeWithOffset] = startStr.split("T");
-    const event_hour = allDay
-      ? "00:00:00"
-      : timeWithOffset?.substring(0, 8) || "00:00:00";
+  // const handleEventChange = async (changeInfo) => {
+  //   const { id, title, start, allDay } = changeInfo.event;
+  //   const startStr = start.toISOString();
+  //   const [event_day, timeWithOffset] = startStr.split("T");
+  //   const event_hour = allDay
+  //     ? "00:00:00"
+  //     : timeWithOffset?.substring(0, 8) || "00:00:00";
 
-    try {
-      const { data, error } = await supabase
-        .from("events")
-        .update({
-          event_name: title,
-          event_day,
-          event_hour,
-        })
-        .eq("id", id);
+  //   try {
+  //     const { data, error } = await supabase
+  //       .from("events")
+  //       .update({
+  //         event_name: title,
+  //         event_day,
+  //         event_hour,
+  //       })
+  //       .eq("id", id);
 
-      if (error) throw error;
-      console.log("Event updated successfully:", data);
-    } catch (err) {
-      console.error("Error updating event:", err.message);
-      changeInfo.revert();
-    }
-  };
+  //     if (error) throw error;
+  //     console.log("Event updated successfully:", data);
+  //   } catch (err) {
+  //     console.error("Error updating event:", err.message);
+  //     changeInfo.revert();
+  //   }
+  // };
 
-  const handleEventClick = async (clickInfo) => {
-    const confirmed = confirm(
-      `Are you sure you want to delete '${clickInfo.event.title}'?`
-    );
+  // const handleEventClick = async (clickInfo) => {
+  //   const confirmed = confirm(
+  //     `Are you sure you want to delete '${clickInfo.event.title}'?`
+  //   );
 
-    if (confirmed) {
-      try {
-        const { data, error } = await supabase
-          .from("events")
-          .delete()
-          .eq("id", clickInfo.event.id);
+  //   if (confirmed) {
+  //     try {
+  //       const { data, error } = await supabase
+  //         .from("events")
+  //         .delete()
+  //         .eq("id", clickInfo.event.id);
 
-        if (error) throw error;
-        console.log("Event deleted successfully:", data);
-        clickInfo.event.remove();
-      } catch (err) {
-        console.error("Delete error:", err.message);
-        alert("Failed to delete event. Please try again.");
-      }
-    }
-  };
+  //       if (error) throw error;
+  //       console.log("Event deleted successfully:", data);
+  //       clickInfo.event.remove();
+  //     } catch (err) {
+  //       console.error("Delete error:", err.message);
+  //       alert("Failed to delete event. Please try again.");
+  //     }
+  //   }
+  // };
 
   return (
     <div className="demo-app w-1/2">
@@ -151,10 +151,10 @@ export default function Calendar() {
           selectMirror={true}
           dayMaxEvents={true}
           events={currentEvents}
-          select={handleDateSelect}
-          eventClick={handleEventClick}
-          eventAdd={handleEventAdd}
-          eventChange={handleEventChange}
+          // select={handleDateSelect}
+          // eventClick={handleEventClick}
+          // eventAdd={handleEventAdd}
+          // eventChange={handleEventChange}
           eventContent={renderEventContent}
           allDaySlot={true}
         />
