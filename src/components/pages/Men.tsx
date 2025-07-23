@@ -8,6 +8,8 @@ interface User {
   email: string;
   phone: string;
   location: string;
+  latitude: number | null;
+  longitude: number | null;
 }
 
 function Men() {
@@ -35,12 +37,42 @@ function Men() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    let lat: number | null = null;
+    let lon: number | null = null;
+    let formattedAddress: string = location.trim();
+
+    try {
+      const res = await fetch(
+        `https://restcountries.com/v3.1/name/${encodeURIComponent(location.trim())}`
+      );
+      const data = await res.json();
+
+      if (!res.ok || !data || !data[0]?.latlng) {
+        alert("Could not find country coordinates. Please try a valid country name.");
+        return;
+      }
+
+      [lat, lon] = data[0].latlng;
+      formattedAddress = data[0].name.common;
+    } catch (error) {
+      console.error("Error fetching country data:", error);
+      alert("Error fetching coordinates. Please try again later.");
+      return;
+    }
+
+    if (lat === null || lon === null) {
+      alert("Geocoding failed to provide valid coordinates.");
+      return;
+    }
+
     const userData = {
       first_name: firstName,
       last_name: lastName,
       email,
       phone,
-      location,
+      location: formattedAddress,
+      latitude: lat,
+      longitude: lon,
     };
 
     const { data: existingUsers, error: fetchError } = await supabase
@@ -126,7 +158,7 @@ function Men() {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="flex gap-3">
+      <form onSubmit={handleSubmit} className="flex gap-3 flex-wrap">
         <input
           className="border-2 border-gray-500"
           type="text"
@@ -135,6 +167,7 @@ function Men() {
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setFirstName(e.target.value)
           }
+          required
         />
         <input
           className="border-2 border-gray-500"
@@ -144,6 +177,7 @@ function Men() {
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setLastName(e.target.value)
           }
+          required
         />
         <input
           className="border-2 border-gray-500"
@@ -153,6 +187,7 @@ function Men() {
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setEmail(e.target.value)
           }
+          required
         />
         <input
           className="border-2 border-gray-500"
@@ -162,22 +197,25 @@ function Men() {
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setPhone(e.target.value)
           }
+          required
         />
         <input
           className="border-2 border-gray-500"
           type="text"
-          placeholder="Location"
+          placeholder="Country"
           value={location}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             setLocation(e.target.value)
           }
+          required
         />
-        <button className="border-2 px-3" type="submit">
+        <button className="border-2 px-3 bg-blue-200" type="submit">
           {editingId ? "Update" : "Submit"}
         </button>
         {editingId && (
           <button
             type="button"
+            className="border-2 px-3 bg-gray-300"
             onClick={() => {
               setEditingId(null);
               setFirstName("");
@@ -192,34 +230,38 @@ function Men() {
         )}
       </form>
 
-      <table>
+      <table className="mt-4 border border-collapse border-gray-400 w-full text-sm">
         <thead>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Location</th>
-            <th>Actions</th>
+            <th className="border p-2">First Name</th>
+            <th className="border p-2">Last Name</th>
+            <th className="border p-2">Email</th>
+            <th className="border p-2">Phone</th>
+            <th className="border p-2">Location</th>
+            <th className="border p-2">Latitude</th>
+            <th className="border p-2">Longitude</th>
+            <th className="border p-2">Actions</th>
           </tr>
         </thead>
         <tbody>
           {userList.map((user) => (
             <tr key={user.id}>
-              <td>{user.first_name}</td>
-              <td>{user.last_name}</td>
-              <td>{user.email}</td>
-              <td>{user.phone}</td>
-              <td>{user.location}</td>
-              <td>
+              <td className="border p-2">{user.first_name}</td>
+              <td className="border p-2">{user.last_name}</td>
+              <td className="border p-2">{user.email}</td>
+              <td className="border p-2">{user.phone}</td>
+              <td className="border p-2">{user.location}</td>
+              <td className="border p-2">{user.latitude}</td>
+              <td className="border p-2">{user.longitude}</td>
+              <td className="border p-2 flex gap-2">
                 <button
-                  className="border-2 bg-green-500 px-3"
+                  className="border-2 bg-green-500 px-2 text-white"
                   onClick={() => editUser(user)}
                 >
                   Edit
                 </button>
                 <button
-                  className="border-2 bg-red-500 px-3"
+                  className="border-2 bg-red-500 px-2 text-white"
                   onClick={() => deleteUser(user.id)}
                 >
                   Delete
