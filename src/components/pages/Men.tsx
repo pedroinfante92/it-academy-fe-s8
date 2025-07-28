@@ -10,6 +10,7 @@ interface User {
   location: string;
   latitude: number | null;
   longitude: number | null;
+  created_at?: string;
 }
 
 function Men() {
@@ -116,7 +117,8 @@ function Men() {
     } else {
       const { data, error } = await supabase
         .from("SupaCRUD")
-        .insert([userData]);
+        .insert([userData])
+        .select();
 
       if (error) {
         console.error("Insert Error:", error);
@@ -237,7 +239,7 @@ function Men() {
             <th className="border p-2">Last Name</th>
             <th className="border p-2">Email</th>
             <th className="border p-2">Phone</th>
-            <th className="border p-2">Location</th>
+            <th className="border p-2">Country</th>
             <th className="border p-2">Latitude</th>
             <th className="border p-2">Longitude</th>
             <th className="border p-2">Actions</th>
