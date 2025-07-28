@@ -49,7 +49,9 @@ function Men() {
       const data = await res.json();
 
       if (!res.ok || !data || !data[0]?.latlng) {
-        alert("Could not find country coordinates. Please try a valid country name.");
+        alert(
+          "Could not find country coordinates. Please try a valid country name."
+        );
         return;
       }
 
